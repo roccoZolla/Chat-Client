@@ -5,6 +5,7 @@
 
 package com.mycompany.chat.client;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,60 +19,59 @@ import java.util.Scanner;
  * @author rocco
  */
 
+// indirizzo ip server 169.254.152.75
+// indirizzo ip macchina 127.0.0.1 local host
+
 public class Client {
-    static String serverAddress = "localhost"; // Indirizzo IP del server, con localhost ottengo l'indirizzo ip della macchina host del server
+    // static String serverAddress = "localhost"; // Indirizzo IP del server, con localhost ottengo l'indirizzo ip della macchina host del server
     // static String serverAddress = "192.xxx.x.xxx" // indirizzo ip del server specificato con l'indirizzo ip
     // static string serverAddress = "example.com" // collegamento al server tramite il suo dominio
-    static int serverPort = 49152; // Porta del server
-
-    public static void main(String[] args) {
+    static private int serverPort = 49152; // numero di porta del server
+    static private String server_address;
+    static private HomeFrame home;
+    
+    public static void setServerAddress(String address) {
+        server_address = address;
+    }
+    
+    public static void connectToServer() {
+        System.out.println("Hai inserito: " + server_address);
+        Socket client = new Socket();
+        
+        // tenta la connessione
         try {
-            InetAddress serverInetAddress = InetAddress.getByName(serverAddress);
-            Socket socket = new Socket(serverInetAddress, serverPort);
+            client.connect(new InetSocketAddress(server_address, serverPort));
 
-            // Flussi di input e output per comunicare con il server
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+            if (client.isConnected()) {
+                // gestisce il flusso di input dal server
+                home.setStatusLabel("Connessione riuscita", Color.GREEN);
+                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-            // Thread per la ricezione dei messaggi dal server 
-            // se ne occuopa il metodo sendMessage della classe ClientHandler
-            Thread receiveThread = new Thread(() -> {
                 try {
                     String response;
                     while ((response = in.readLine()) != null) {
                         System.out.println("Messaggio dal server: " + response);
                     }
+
+                    // chiudi il socket
+                    client.close();
+                    // home.dispose();
                 } catch (IOException e) {
                     System.err.println("Errore durante la lettura dei messaggi dal server: " + e.getMessage());
                 }
-            });
-            receiveThread.start();
-
-            // Thread per l'invio dei messaggi al server
-            Thread sendThread = new Thread(() -> {
-                try {
-                    Scanner scanner = new Scanner(System.in);
-                    while (true) {
-                        System.out.println("Inserisci una stringa:");
-                        String textInput = scanner.nextLine();
-                        out.println(textInput);
-                        if (textInput.equals("esc")) break;
-                    }
-                } catch (Exception e) {
-                    System.err.println("Errore durante l'invio del messaggio al server: " + e.getMessage());
-                }
-            });
-            sendThread.start();
-
-            // Attendi che entrambi i thread terminino
-            receiveThread.join();
-            sendThread.join();
-
-            // Chiude il socket quando la comunicazione è terminata
-            System.out.println("Comunicazione terminata. Chiusura del client.");
-            socket.close();
-        } catch (IOException | InterruptedException e) {
-            System.err.println("Errore durante la connessione al server: " + e.getMessage());
+            }
+        } catch (IOException e) {
+            home.setStatusLabel("Connessione non riuscita", Color.RED);
+            System.err.println("Errore durante l'esecuzione del server: " + e.getMessage());
         }
+    }
+
+    public static void main(String[] args) throws IOException{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        
+        home = new HomeFrame();
+        home.setSize(900, 600);
+        home.setLocationRelativeTo(null); 
+        home.setVisible(true);
     }
 }
