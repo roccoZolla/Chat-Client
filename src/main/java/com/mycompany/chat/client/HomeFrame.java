@@ -23,8 +23,15 @@ public class HomeFrame extends javax.swing.JFrame {
         no_valid_ip_label.setText("Indirizzo IP non valido!");
         no_valid_ip_label.setVisible(false);
         
+        // setta il pulsante disconnetti come disattivato
+        disconnect_button.setEnabled(false);
+        
         connect_button.addActionListener((java.awt.event.ActionEvent evt) -> {
             connect_buttonActionPerformed(evt);
+        });
+        
+        disconnect_button.addActionListener((java.awt.event.ActionEvent evt) -> {
+            disconnect_buttonActionPerformed(evt);
         });
     }
     
@@ -40,9 +47,17 @@ public class HomeFrame extends javax.swing.JFrame {
         }
     }
     
+    private void disconnect_buttonActionPerformed(java.awt.event.ActionEvent evt) {
+        Client.disconnectFromServer();
+    }
+    
     public void setStatusLabel(String text, Color color) {
         status_text.setForeground(color);
         status_text.setText(text);
+    }
+    
+    public void activateDisconnectButton() {
+        disconnect_button.setEnabled(true);
     }
 
     /**
@@ -59,6 +74,7 @@ public class HomeFrame extends javax.swing.JFrame {
         connect_button = new javax.swing.JButton();
         ip_address_text = new javax.swing.JLabel();
         status_text = new javax.swing.JLabel();
+        disconnect_button = new javax.swing.JButton();
         no_valid_ip_label = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -91,11 +107,16 @@ public class HomeFrame extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         getContentPane().add(status_text, gridBagConstraints);
+
+        disconnect_button.setText("Disconnetti");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        getContentPane().add(disconnect_button, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         getContentPane().add(no_valid_ip_label, gridBagConstraints);
 
         pack();
@@ -104,6 +125,7 @@ public class HomeFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton connect_button;
+    private javax.swing.JButton disconnect_button;
     private javax.swing.JTextField ip_address_field;
     private javax.swing.JLabel ip_address_text;
     private javax.swing.JLabel no_valid_ip_label;

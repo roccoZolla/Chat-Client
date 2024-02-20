@@ -26,17 +26,19 @@ public class Client {
     // static String serverAddress = "localhost"; // Indirizzo IP del server, con localhost ottengo l'indirizzo ip della macchina host del server
     // static String serverAddress = "192.xxx.x.xxx" // indirizzo ip del server specificato con l'indirizzo ip
     // static string serverAddress = "example.com" // collegamento al server tramite il suo dominio
-    static private int serverPort = 49152; // numero di porta del server
+    static private int serverPort = 8080; // numero di porta del server
     static private String server_address;  // indirizzo ip del server
+    static private Socket client;
     static private HomeFrame home;
     
     public static void setServerAddress(String address) {
         server_address = address;
     }
     
+    // connettiti al server
     public static void connectToServer() {
         System.out.println("Hai inserito: " + server_address);
-        Socket client = new Socket();
+        client = new Socket();
         
         // tenta la connessione
         try {
@@ -45,6 +47,7 @@ public class Client {
             if (client.isConnected()) {
                 // gestisce il flusso di input dal server
                 home.setStatusLabel("Connessione riuscita", Color.GREEN);
+                home.activateDisconnectButton();    // attiva il bottone di disconnessione
                 BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
                 try {
@@ -54,7 +57,7 @@ public class Client {
                     }
 
                     // chiudi il socket
-                    client.close();
+                    // client.close();
                 } catch (IOException e) {
                     System.err.println("Errore durante la lettura dei messaggi dal server: " + e.getMessage());
                 }
@@ -62,6 +65,15 @@ public class Client {
         } catch (IOException e) {
             home.setStatusLabel("Connessione non riuscita", Color.RED);
             System.err.println("Errore durante l'esecuzione del server: " + e.getMessage());
+        }
+    }
+    
+    // disconnettiti dal server
+    public static void disconnectFromServer() {
+        try {
+            client.close();
+        } catch (IOException e) {
+            System.err.println("Errore durante la lettura dei messaggi dal server: " + e.getMessage());
         }
     }
 
