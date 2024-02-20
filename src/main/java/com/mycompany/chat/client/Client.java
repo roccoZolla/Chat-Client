@@ -27,7 +27,7 @@ public class Client {
     // static String serverAddress = "192.xxx.x.xxx" // indirizzo ip del server specificato con l'indirizzo ip
     // static string serverAddress = "example.com" // collegamento al server tramite il suo dominio
     static private int serverPort = 49152; // numero di porta del server
-    static private String server_address;
+    static private String server_address;  // indirizzo ip del server
     static private HomeFrame home;
     
     public static void setServerAddress(String address) {
@@ -55,7 +55,6 @@ public class Client {
 
                     // chiudi il socket
                     client.close();
-                    // home.dispose();
                 } catch (IOException e) {
                     System.err.println("Errore durante la lettura dei messaggi dal server: " + e.getMessage());
                 }
@@ -66,10 +65,9 @@ public class Client {
         }
     }
 
-    public static void main(String[] args) throws IOException{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        
+    public static void main(String[] args) {
         home = new HomeFrame();
+        home.setTitle("Chat-Client");
         home.setSize(900, 600);
         home.setLocationRelativeTo(null); 
         home.setVisible(true);
