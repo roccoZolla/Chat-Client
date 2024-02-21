@@ -65,6 +65,6 @@ public class MessageReader extends Thread {
         // Questo metodo deve essere implementato per adattarsi alla tua interfaccia utente
         // Ad esempio, potrebbe aggiornare una casella di testo o visualizzare una notifica
         System.out.println("cacato in testa");
-        chat.appendMessage("Tizio: " + message);
+        chat.appendMessage(message);
     }
 }
