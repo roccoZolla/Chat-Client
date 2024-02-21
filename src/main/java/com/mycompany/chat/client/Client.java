@@ -6,13 +6,8 @@
 package com.mycompany.chat.client;
 
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.*;
-import java.util.Scanner;
 
 /**
  *
@@ -26,10 +21,10 @@ public class Client {
     // static String serverAddress = "localhost"; // Indirizzo IP del server, con localhost ottengo l'indirizzo ip della macchina host del server
     // static String serverAddress = "192.xxx.x.xxx" // indirizzo ip del server specificato con l'indirizzo ip
     // static string serverAddress = "example.com" // collegamento al server tramite il suo dominio
-    static private int serverPort = 8080; // numero di porta del server
-    static private String server_address;  // indirizzo ip del server
-    static private Socket client;
-    static private HomeFrame home;
+    private static int serverPort = 8080; // numero di porta del server
+    private static String server_address;  // indirizzo ip del server
+    private static Socket client;
+    private static ClientFrame frame;
     
     public static void setServerAddress(String address) {
         server_address = address;
@@ -46,24 +41,18 @@ public class Client {
 
             if (client.isConnected()) {
                 // gestisce il flusso di input dal server
-                home.setStatusLabel("Connessione riuscita", Color.GREEN);
-                home.activateDisconnectButton();    // attiva il bottone di disconnessione
-                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
-                try {
-                    String response;
-                    while ((response = in.readLine()) != null) {
-                        System.out.println("Messaggio dal server: " + response);
-                    }
-
-                    // chiudi il socket
-                    // client.close();
-                } catch (IOException e) {
-                    System.err.println("Errore durante la lettura dei messaggi dal server: " + e.getMessage());
-                }
+                frame.setStatusLabel("Connessione riuscita", Color.GREEN);
+                
+                // thread relativo alla ricezione dei messaggi
+                MessageReader messageReader = new MessageReader(client.getInputStream(), frame);
+                messageReader.start();
+                
+                // thread relativo all'invio dei messaggi
+                MessageSender messageSender = new MessageSender(client);
+                messageSender.start();
             }
         } catch (IOException e) {
-            home.setStatusLabel("Connessione non riuscita", Color.RED);
+            frame.setStatusLabel("Connessione non riuscita", Color.RED);
             System.err.println("Errore durante l'esecuzione del server: " + e.getMessage());
         }
     }
@@ -71,17 +60,20 @@ public class Client {
     // disconnettiti dal server
     public static void disconnectFromServer() {
         try {
-            client.close();
+            // Chiudi il socket del client
+            if (client != null) {
+                client.close();
+            }
         } catch (IOException e) {
             System.err.println("Errore durante la lettura dei messaggi dal server: " + e.getMessage());
         }
     }
 
     public static void main(String[] args) {
-        home = new HomeFrame();
-        home.setTitle("Chat-Client");
-        home.setSize(900, 600);
-        home.setLocationRelativeTo(null); 
-        home.setVisible(true);
+        frame = new ClientFrame();
+        frame.setTitle("Chat-Client");
+        frame.setSize(900, 600);
+        frame.setLocationRelativeTo(null); 
+        frame.setVisible(true);
     }
 }
