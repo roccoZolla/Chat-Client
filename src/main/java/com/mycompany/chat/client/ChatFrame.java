@@ -9,12 +9,36 @@ package com.mycompany.chat.client;
  * @author rocco
  */
 public class ChatFrame extends javax.swing.JFrame {
+    MessageReader messageReader;
+    MessageSender messageSender;
 
     /**
      * Creates new form ChatFrame
      */
     public ChatFrame() {
         initComponents();
+              
+        setTitle("Chat-Client");
+        setSize(900, 600);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+    
+    public void setMessageReader(MessageReader messageReader) {
+        this.messageReader = messageReader;
+    }
+    
+    public void setMessageSender(MessageSender messageSender) {
+        this.messageSender = messageSender;
+    }
+    
+    public void appendMessage(String message) {
+        chat_area.append(message + "\n");
+    }
+    
+    // aggiunge alla textArea il server a cui è collegato il client
+    public void addServer(String str) {
+        server_list_area.append("\n" + str + "\n");
     }
 
     /**
@@ -25,6 +49,7 @@ public class ChatFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         disconnect_button = new javax.swing.JButton();
         chat_field = new javax.swing.JTextField();
@@ -35,8 +60,27 @@ public class ChatFrame extends javax.swing.JFrame {
         server_list_area = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         disconnect_button.setText("Disconnetti");
+        disconnect_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disconnect_buttonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        getContentPane().add(disconnect_button, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 135;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        getContentPane().add(chat_field, gridBagConstraints);
 
         send_chat_button.setText(">");
         send_chat_button.addActionListener(new java.awt.event.ActionListener() {
@@ -44,10 +88,31 @@ public class ChatFrame extends javax.swing.JFrame {
                 send_chat_buttonActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        getContentPane().add(send_chat_button, gridBagConstraints);
 
+        chat_area.setEditable(false);
         chat_area.setColumns(20);
         chat_area.setRows(5);
         jScrollPane1.setViewportView(chat_area);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 261;
+        gridBagConstraints.ipady = 246;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 6, 0, 0);
+        getContentPane().add(jScrollPane1, gridBagConstraints);
 
         server_list_area.setEditable(false);
         server_list_area.setColumns(20);
@@ -55,44 +120,42 @@ public class ChatFrame extends javax.swing.JFrame {
         server_list_area.setText("Server");
         jScrollPane2.setViewportView(server_list_area);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(disconnect_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(chat_field, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(send_chat_button, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chat_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(send_chat_button, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(disconnect_button)))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.ipady = 246;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        getContentPane().add(jScrollPane2, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+   // invio dei messaggi al server
     private void send_chat_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_send_chat_buttonActionPerformed
         // TODO add your handling code here:
-        
+        if(!chat_field.getText().isEmpty()) {
+            // invia messaggio al server
+            messageSender.sendMessage(chat_field.getText());
+            chat_area.append("Tu: " + chat_field.getText() + "\n");
+            chat_field.setText("");
+        }
     }//GEN-LAST:event_send_chat_buttonActionPerformed
+
+    // chiama il metodo per disconnettersi dal server
+    private void disconnect_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnect_buttonActionPerformed
+        // TODO add your handling code here:
+        // rilascia le risorse relative ai thread
+        // messageReader.closeResources();
+        // termina la connessione
+        Client.disconnectFromServer();
+        messageSender.closeResources();
+        
+
+    }//GEN-LAST:event_disconnect_buttonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

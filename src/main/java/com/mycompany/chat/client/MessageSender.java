@@ -5,7 +5,6 @@
 package com.mycompany.chat.client;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
@@ -46,5 +45,23 @@ public class MessageSender extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+    
+    // rilascia le risorse
+    public void closeResources() {
+        // chiude il flusso di output
+        if (writer != null) {
+            writer.close();
+        }
+        
+        try {
+            if(socket != null) {
+                socket.close();
+            } 
+        } catch (IOException e) {
+            System.err.println("Errore durante la chiusura del socket: " + e.getMessage());
+        }
+        
+        System.out.println("message sender chiuso correttamente");
     }
 }

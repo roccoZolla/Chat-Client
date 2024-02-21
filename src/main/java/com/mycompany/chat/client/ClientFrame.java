@@ -41,10 +41,6 @@ public class ClientFrame extends javax.swing.JFrame {
         }
     }
     
-    private void disconnect_buttonActionPerformed(java.awt.event.ActionEvent evt) {
-        Client.disconnectFromServer();
-    }
-    
     public void setStatusLabel(String text, Color color) {
         status_text.setForeground(color);
         status_text.setText(text);
