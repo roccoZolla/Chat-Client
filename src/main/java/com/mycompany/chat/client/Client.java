@@ -69,7 +69,7 @@ public class Client {
         }
     }
     
-    // disconnettiti dal server
+    // disconnettiti dal server e ritorna alla schermata iniziale
     public static void disconnectFromServer() {
         System.out.println("Chiamata a disconnect from server");
         try {
@@ -85,13 +85,20 @@ public class Client {
         } catch (IOException e) {
             System.err.println("Errore durante la lettura dei messaggi dal server: " + e.getMessage());
         }
+        
+        openNewHomeFrame();
     }
-
-    public static void main(String[] args) {
+    
+    // crea una nuova istanza della pagina iniziale
+    private static void openNewHomeFrame() {
         frame = new ClientFrame();
         frame.setTitle("Chat-Client");
         frame.setSize(900, 600);
         frame.setLocationRelativeTo(null); 
         frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        openNewHomeFrame();
     }
 }

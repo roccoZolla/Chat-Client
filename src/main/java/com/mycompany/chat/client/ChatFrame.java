@@ -150,10 +150,10 @@ public class ChatFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         // rilascia le risorse relative ai thread
         // messageReader.closeResources();
-        // termina la connessione
-        Client.disconnectFromServer();
         messageSender.closeResources();
         
+        // termina la connessioneS
+        Client.disconnectFromServer();
 
     }//GEN-LAST:event_disconnect_buttonActionPerformed
 
