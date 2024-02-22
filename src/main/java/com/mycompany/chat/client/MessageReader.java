@@ -33,20 +33,16 @@ public class MessageReader extends Thread {
             }
         } catch (IOException e) {
             // Gestisci eventuali errori di lettura
-            e.printStackTrace();
+            // e.printStackTrace();
+            System.err.println("Errore durante la chiusura del messageReader: " + e.getMessage());
         } finally {
-            // Chiudi il BufferedReader
-            System.out.println("Chiusura del buffered reader");
-            try {
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            closeResources();
         }
     }
     
     // rilascia le risorse una volta chiusa la connessione
-    public void closeResources() {
+    private void closeResources() {
+        System.out.println("rilascio delle risorse in message Reader");
         try {
             // chiudi flusso di input
             if (reader != null) {

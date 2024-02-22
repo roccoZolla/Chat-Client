@@ -40,6 +40,15 @@ public class ChatFrame extends javax.swing.JFrame {
     public void addServer(String str) {
         server_list_area.append("\n" + str + "\n");
     }
+    
+    private void sendMessageToServer() {
+        if (!chat_field.getText().isEmpty()) {
+            // invia messaggio al server
+            messageSender.sendMessage(chat_field.getText());
+            chat_area.append("Tu: " + chat_field.getText() + "\n");
+            chat_field.setText("");
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -74,6 +83,12 @@ public class ChatFrame extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
         getContentPane().add(disconnect_button, gridBagConstraints);
+
+        chat_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chat_fieldActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -137,25 +152,24 @@ public class ChatFrame extends javax.swing.JFrame {
    // invio dei messaggi al server
     private void send_chat_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_send_chat_buttonActionPerformed
         // TODO add your handling code here:
-        if(!chat_field.getText().isEmpty()) {
-            // invia messaggio al server
-            messageSender.sendMessage(chat_field.getText());
-            chat_area.append("Tu: " + chat_field.getText() + "\n");
-            chat_field.setText("");
-        }
+        sendMessageToServer();
     }//GEN-LAST:event_send_chat_buttonActionPerformed
 
     // chiama il metodo per disconnettersi dal server
     private void disconnect_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnect_buttonActionPerformed
         // TODO add your handling code here:
-        // rilascia le risorse relative ai thread
-        // messageReader.closeResources();
-        messageSender.closeResources();
-        
-        // termina la connessioneS
+        // termina la connessione
         Client.disconnectFromServer();
-
+        
+        // rilascia le risorse
+        messageSender.interrupt();
     }//GEN-LAST:event_disconnect_buttonActionPerformed
+    
+    // invio dei messaggi al server
+    private void chat_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chat_fieldActionPerformed
+        // TODO add your handling code here:
+        sendMessageToServer();
+    }//GEN-LAST:event_chat_fieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

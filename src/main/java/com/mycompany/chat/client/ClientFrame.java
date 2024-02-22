@@ -32,8 +32,7 @@ public class ClientFrame extends javax.swing.JFrame {
     private void connect_buttonActionPerformed(java.awt.event.ActionEvent evt) {
         if(Utils.checkIPAddress(ip_address_field.getText())) {
             no_valid_ip_label.setVisible(false);
-            Client.setServerAddress(ip_address_field.getText());
-            Client.connectToServer();
+            Client.connectToServer(ip_address_field.getText());
         } else {
             no_valid_ip_label.setVisible(true);
             ip_address_field.setText("");
@@ -41,8 +40,10 @@ public class ClientFrame extends javax.swing.JFrame {
         }
     }
     
-    public void setStatusLabel(String text, Color color) {
-        status_text.setForeground(color);
+    public void setStatusLabel(String text, boolean color) {
+        if(color) status_text.setForeground(Color.GREEN);
+        if(!color) status_text.setForeground(Color.RED);
+        
         status_text.setText(text);
     }
 
@@ -66,6 +67,11 @@ public class ClientFrame extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         ip_address_field.setRequestFocusEnabled(false);
+        ip_address_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ip_address_fieldActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -98,6 +104,18 @@ public class ClientFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ip_address_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ip_address_fieldActionPerformed
+        // TODO add your handling code here:
+        if(Utils.checkIPAddress(ip_address_field.getText())) {
+            no_valid_ip_label.setVisible(false);
+            Client.connectToServer(ip_address_field.getText());
+        } else {
+            no_valid_ip_label.setVisible(true);
+            ip_address_field.setText("");
+            ip_address_field.requestFocusInWindow(); // Rendi nuovamente selezionabile il campo di testo
+        }
+    }//GEN-LAST:event_ip_address_fieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

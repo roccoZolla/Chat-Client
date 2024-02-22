@@ -5,7 +5,6 @@
 
 package com.mycompany.chat.client;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.net.*;
 
@@ -26,23 +25,22 @@ public class Client {
     private static Socket client;
     private static ClientFrame frame;
     private static ChatFrame chat_frame;
-    
-    public static void setServerAddress(String address) {
-        server_address = address;
-    }
-    
+
     // connettiti al server
-    public static void connectToServer() {
+    public static void connectToServer(String add_server) {
+        server_address = add_server;
         System.out.println("Hai inserito: " + server_address);
         client = new Socket();
         
         // tenta la connessione
         try {
+            System.out.println("tento la connessione...");
             client.connect(new InetSocketAddress(server_address, server_port));
 
             if (client.isConnected()) {
+                System.out.println("connessione riuscita");
                 // gestisce il flusso di input dal server
-                frame.setStatusLabel("Connessione riuscita", Color.GREEN);
+                frame.setStatusLabel("Connessione riuscita", true);
                 
                 // crea un chatFrame
                 chat_frame = new ChatFrame();
@@ -64,7 +62,7 @@ public class Client {
                 frame.dispose();
             }
         } catch (IOException e) {
-            frame.setStatusLabel("Connessione non riuscita", Color.RED);
+            frame.setStatusLabel("Connessione non riuscita", false);
             System.err.println("Errore durante l'esecuzione del server: " + e.getMessage());
         }
     }
@@ -83,7 +81,7 @@ public class Client {
                 chat_frame.dispose();
             }
         } catch (IOException e) {
-            System.err.println("Errore durante la lettura dei messaggi dal server: " + e.getMessage());
+            System.err.println("Errore durante la disconnessione dal server: " + e.getMessage());
         }
         
         openNewHomeFrame();

@@ -17,12 +17,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class MessageSender extends Thread {
     private final Socket socket;
     private final BlockingQueue<String> messageQueue; // coda bloccante, invio dei messaggi in maniera thread-safe
-    private final PrintWriter writer;
+    private final PrintWriter output;       // flusso di output
 
     public MessageSender(Socket socket) throws IOException {
         this.socket = socket;
         this.messageQueue = new LinkedBlockingQueue<>();
-        this.writer = new PrintWriter(socket.getOutputStream(), true);
+        this.output = new PrintWriter(socket.getOutputStream(), true);
     }
 
     public void sendMessage(String message) {
@@ -32,29 +32,29 @@ public class MessageSender extends Thread {
     @Override
     public void run() {
         try {
-            while (!Thread.currentThread().isInterrupted()) {
+            while (!Thread.currentThread().isInterrupted()){
                 String message = messageQueue.take();
-                writer.println(message);
+                output.println(message);
+                output.flush();
             }
         } catch (InterruptedException e) {
             // Thread interrotto, esce dal loop
+            e.printStackTrace();
+            System.err.println("Thread interrotto: " + e.getMessage());
         } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            // rilascia le risorse relative al thread
+            closeResources();
         }
     }
     
     // rilascia le risorse
-    public void closeResources() {
-        // chiude il flusso di output
-        if (writer != null) {
-            writer.close();
-        }
-        
+    private void closeResources() {
         try {
+            // chiude il flusso di output
+            if (output != null) {
+                output.close();
+            }
+            
             if(socket != null) {
                 socket.close();
             } 
