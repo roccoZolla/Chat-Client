@@ -22,13 +22,15 @@ public class Client {
     // static string serverAddress = "example.com" // collegamento al server tramite il suo dominio
     private static int server_port = 8080; // numero di porta del server
     private static String server_address;  // indirizzo ip del server
+    private static String nickname;        // nickname scelto dall'utente
     private static Socket client;
     private static ClientFrame frame;
     private static ChatFrame chat_frame;
 
     // connettiti al server
-    public static void connectToServer(String add_server) {
+    public static void connectToServer(String client_nick, String add_server) {
         server_address = add_server;
+        nickname = client_nick;
         System.out.println("Hai inserito: " + server_address);
         client = new Socket();
         
@@ -52,6 +54,9 @@ public class Client {
                 // thread relativo all'invio dei messaggi
                 MessageSender messageSender = new MessageSender(client);
                 messageSender.start();
+                
+                // nel primo messaggio inviato del client è contenuto il suo nickname
+                messageSender.sendMessage("Nickname: " + nickname);
                 
                 chat_frame.setMessageReader(messageReader);                
                 chat_frame.setMessageSender(messageSender);

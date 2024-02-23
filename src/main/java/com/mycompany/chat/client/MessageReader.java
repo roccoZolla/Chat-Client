@@ -28,8 +28,12 @@ public class MessageReader extends Thread {
         try {
             String message;
             while ((message = reader.readLine()) != null) {
-                // Aggiorna l'interfaccia utente con il messaggio ricevuto
-                updateUIWithMessage(message);
+                if (message.startsWith("lista: ")) {
+                    updateClientList(message);
+                } else {
+                    // Aggiorna l'interfaccia utente con il messaggio ricevuto
+                    updateChat(message);
+                }
             }
         } catch (IOException e) {
             // Gestisci eventuali errori di lettura
@@ -55,12 +59,15 @@ public class MessageReader extends Thread {
         
         System.out.println("message reader chiuso correttamente");
     }
-
-    private void updateUIWithMessage(String message) {
-        // Aggiorna l'interfaccia utente con il messaggio ricevuto
-        // Questo metodo deve essere implementato per adattarsi alla tua interfaccia utente
-        // Ad esempio, potrebbe aggiornare una casella di testo o visualizzare una notifica
-        System.out.println("cacato in testa");
+    
+    // aggiorna la lista degli utenti connessi nell'interfaccia
+    private void updateClientList(String clients_list) {
+        chat.updateClientList(Utils.retrieveClient(clients_list));
+    }
+    
+    
+    // aggiorna l'interfaccia utente con il messaggio ricevuto
+    private void updateChat(String message) {
         chat.appendMessage(message);
     }
 }

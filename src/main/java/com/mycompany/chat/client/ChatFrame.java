@@ -22,6 +22,8 @@ public class ChatFrame extends javax.swing.JFrame {
         setSize(900, 600);
         setLocationRelativeTo(null);
         setVisible(true);
+        
+        users_list_area.append("Utenti in chat: \n");
     }
     
     public void setMessageReader(MessageReader messageReader) {
@@ -38,7 +40,11 @@ public class ChatFrame extends javax.swing.JFrame {
     
     // aggiunge alla textArea il server a cui è collegato il client
     public void addServer(String str) {
-        server_list_area.append("\n" + str + "\n");
+        server_label.setText(str);
+    }
+    
+    public void updateClientList(String client_list) {
+        users_list_area.setText(client_list);
     }
     
     private void sendMessageToServer() {
@@ -66,7 +72,10 @@ public class ChatFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         chat_area = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        server_list_area = new javax.swing.JTextArea();
+        users_list_area = new javax.swing.JTextArea();
+        jPanel1 = new javax.swing.JPanel();
+        server_label = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -79,9 +88,9 @@ public class ChatFrame extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 7, 5, 7);
         getContentPane().add(disconnect_button, gridBagConstraints);
 
         chat_field.addActionListener(new java.awt.event.ActionListener() {
@@ -90,11 +99,11 @@ public class ChatFrame extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 135;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 5, 4, 5);
         getContentPane().add(chat_field, gridBagConstraints);
 
         send_chat_button.setText(">");
@@ -104,12 +113,14 @@ public class ChatFrame extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.ipadx = 30;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(send_chat_button, gridBagConstraints);
+
+        jScrollPane1.setBorder(new javax.swing.border.MatteBorder(null));
 
         chat_area.setEditable(false);
         chat_area.setColumns(20);
@@ -117,34 +128,55 @@ public class ChatFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(chat_area);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 261;
-        gridBagConstraints.ipady = 246;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
-        server_list_area.setEditable(false);
-        server_list_area.setColumns(20);
-        server_list_area.setRows(5);
-        server_list_area.setText("Server");
-        jScrollPane2.setViewportView(server_list_area);
+        jScrollPane2.setBorder(new javax.swing.border.MatteBorder(null));
+        jScrollPane2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        users_list_area.setEditable(false);
+        users_list_area.setColumns(20);
+        users_list_area.setRows(5);
+        users_list_area.setPreferredSize(new java.awt.Dimension(276, 110));
+        jScrollPane2.setViewportView(users_list_area);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jScrollPane2, gridBagConstraints);
+
+        jPanel1.setBorder(new javax.swing.border.MatteBorder(null));
+        jPanel1.setPreferredSize(new java.awt.Dimension(50, 50));
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        jPanel1.add(server_label, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.ipady = 246;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        getContentPane().add(jScrollPane2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        getContentPane().add(jPanel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(filler1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -164,21 +196,24 @@ public class ChatFrame extends javax.swing.JFrame {
         // rilascia le risorse
         messageSender.interrupt();
     }//GEN-LAST:event_disconnect_buttonActionPerformed
-    
+
     // invio dei messaggi al server
     private void chat_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chat_fieldActionPerformed
         // TODO add your handling code here:
         sendMessageToServer();
     }//GEN-LAST:event_chat_fieldActionPerformed
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea chat_area;
     private javax.swing.JTextField chat_field;
     private javax.swing.JButton disconnect_button;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton send_chat_button;
-    private javax.swing.JTextArea server_list_area;
+    private javax.swing.JLabel server_label;
+    private javax.swing.JTextArea users_list_area;
     // End of variables declaration//GEN-END:variables
 }

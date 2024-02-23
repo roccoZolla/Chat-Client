@@ -23,4 +23,17 @@ public class Utils {
         
         return false;
     }
+    
+    public static String retrieveClient(String clients_list) {
+        String[] clients = clients_list.split(", ");
+        String client_str = "";
+        
+        for(int i = 0; i < clients.length; i++) {
+            if(!clients[i].equals("lista: ")) {
+                client_str += "- " + clients[i] + "\n";
+            }
+        }
+        
+        return client_str;
+    }
 }
