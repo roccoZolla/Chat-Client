@@ -1,1 +1,3 @@
-# Chat-Client
+# Chat service in Java: Client
+
+Client class through which you can connect to the server and communicate through a message system with other clients (such as Discord). It presents a graphical interface: a login interface, to access a server (for the moment only localhost) via IP address, and a Chat interface where it is possible to chat with other users present, view the list of connected users and disconnect.
